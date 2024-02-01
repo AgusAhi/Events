@@ -3,11 +3,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package com.mycompany.events;
-
-import java.awt.event.ActionEvent;
-import java.text.DateFormat;
-import java.util.Date;
-import java.util.Locale;
+import java.awt.*;
+import java.awt.event.*;
+import java.text.*;
+import java.util.*;
 import javax.swing.*;
 
 /**
@@ -16,48 +15,69 @@ import javax.swing.*;
  */
 public class EventsFrame extends javax.swing.JFrame implements ActionListener {
     
-    private DefaultListModel<String> model;
+            class MoveAdapter extends ComponentAdapter {
 
-    /**
-     * Creates new form EventsFrame
-     */
-    public EventsFrame() {
-        initComponents();  
-        model = new DefaultListModel<String>();
-        jList1.setModel(model);
-        jButton1.addActionListener();
-    }
+            @Override
+            public void componentMoved(ComponentEvent e) {
+                int x = e.getComponent().getX();
+                int y = e.getComponent().getY();
+                labelX.setText("x: " + x);
+                labelY.setText("y: " + y);
+            }
+        }
+
+	private DefaultListModel<String> model;
+	/**
+ 	* Creates new form EventsFrame
+ 	*/
+	public EventsFrame() {
+    	initComponents();
+    	model = new DefaultListModel<String>();
+    	jList1.setModel(model);
+    	jButton1.addActionListener(this);
+    	jButton2.addActionListener(this);
+        addComponentListener(new MoveAdapter());
+	}
     
-    public void actionPerformed(ActionEvent e) {
-        Locale locale = Locale.getDefault();
-        Date date = new Date(e.getWhen());
-        String s = DateFormat.getTimeInstance(DateFormat.SHORT,
-        locale).format(date);
-        if (!model.isEmpty()) {
-            model.clear();
-        }
-        if (e.getID() == ActionEvent.ACTION_PERFORMED) {
-            model.addElement(" Event Id: ACTION_PERFORMED");
-        }
-            model.addElement(" Time: " + s);
-        String source = e.getSource().getClass().getName();
-        model.addElement(" Source: " + source);
-        int mod = e.getModifiers();
-        StringBuffer buffer = new StringBuffer(" Modifiers: ");
-        if ((mod & ActionEvent.ALT_MASK) > 0) {
-        buffer.append("Alt ");
-        }
-        if ((mod & ActionEvent.SHIFT_MASK) > 0) {
-        buffer.append("Shift ");
-        }
-        if ((mod & ActionEvent.META_MASK) > 0) {
-        buffer.append("Meta ");
-        }
-        if ((mod & ActionEvent.CTRL_MASK) > 0) {
-        buffer.append("Ctrl ");
-        }
-        model.addElement(buffer.toString());
-    }
+	@Override
+	public void actionPerformed(ActionEvent e) {
+    	Locale locale = Locale.getDefault();
+    	Date date = new Date(e.getWhen());
+    	String s = DateFormat.getTimeInstance(DateFormat.SHORT,
+    	locale).format(date);
+    	if (!model.isEmpty()) {
+        	model.clear();
+    	}
+    	if (e.getID() == ActionEvent.ACTION_PERFORMED) {
+        	model.addElement(" Event Id: ACTION_PERFORMED");
+    	}
+    	String buttonNumber;
+    	if (e.getSource() == jButton1) {
+        	buttonNumber = "1";
+    	} else {
+        	buttonNumber = "2";
+    	}
+    	model.addElement(" Time: " + s);
+    	String source = e.getSource().getClass().getName();
+    	model.addElement(" Source: " + source + buttonNumber);
+    	int mod = e.getModifiers();
+    	StringBuffer buffer = new StringBuffer(" Modifiers: ");
+    	if ((mod & ActionEvent.ALT_MASK) > 0) {
+        	buffer.append("Alt ");
+    	}
+    	if ((mod & ActionEvent.SHIFT_MASK) > 0) {
+        	buffer.append("Shift ");
+    	}
+    	if ((mod & ActionEvent.META_MASK) > 0) {
+        	buffer.append("Meta ");
+    	}
+    	if ((mod & ActionEvent.CTRL_MASK) > 0) {
+        	buffer.append("Ctrl ");
+    	}
+    	model.addElement(buffer.toString());
+	}
+
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -71,10 +91,15 @@ public class EventsFrame extends javax.swing.JFrame implements ActionListener {
         jButton1 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList<>();
+        jButton2 = new javax.swing.JButton();
+        exitButton1 = new com.mycompany.events.ExitButton();
+        jCheckBox1 = new javax.swing.JCheckBox();
+        labelX = new javax.swing.JLabel();
+        labelY = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jButton1.setText("Ok");
+        jButton1.setText("jButton1");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -88,28 +113,68 @@ public class EventsFrame extends javax.swing.JFrame implements ActionListener {
         });
         jScrollPane1.setViewportView(jList1);
 
+        jButton2.setText("jButton2");
+
+        exitButton1.setText("Exit");
+
+        jCheckBox1.setSelected(true);
+        jCheckBox1.setText("ActiveListener");
+        jCheckBox1.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jCheckBox1StateChanged(evt);
+            }
+        });
+
+        labelX.setText("jLabel1");
+
+        labelY.setText("jLabel2");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(107, 107, 107)
-                .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 101, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(63, 63, 63)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jButton2)
+                            .addComponent(jButton1)
+                            .addComponent(exitButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(46, 46, 46)
+                        .addComponent(jCheckBox1)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 108, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(66, 66, 66))
+                .addGap(78, 78, 78))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(163, 163, 163)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(labelY)
+                    .addComponent(labelX))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(16, 16, 16)
+                .addComponent(jButton1)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(75, 75, 75)
-                        .addComponent(jButton1))
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton2)
+                        .addGap(18, 18, 18)
+                        .addComponent(exitButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(39, 39, 39)
+                        .addComponent(jCheckBox1))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(32, 32, 32)
+                        .addGap(2, 2, 2)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(106, Short.MAX_VALUE))
+                .addGap(36, 36, 36)
+                .addComponent(labelX)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(labelY)
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
         pack();
@@ -118,6 +183,17 @@ public class EventsFrame extends javax.swing.JFrame implements ActionListener {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jCheckBox1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jCheckBox1StateChanged
+        if (jCheckBox1.isSelected()) {
+            jButton1.addActionListener(this);
+            jButton2.addActionListener(this);
+        } else {
+            model.clear(); // Limpia la lista
+            jButton1.removeActionListener(this);
+            jButton2.removeActionListener(this);
+        }
+    }//GEN-LAST:event_jCheckBox1StateChanged
 
     /**
      * @param args the command line arguments
@@ -155,8 +231,15 @@ public class EventsFrame extends javax.swing.JFrame implements ActionListener {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private com.mycompany.events.ExitButton exitButton1;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JList<String> jList1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel labelX;
+    private javax.swing.JLabel labelY;
     // End of variables declaration//GEN-END:variables
 }
+
+
