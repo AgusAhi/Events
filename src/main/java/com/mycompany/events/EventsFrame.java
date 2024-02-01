@@ -23,7 +23,7 @@ public class EventsFrame extends javax.swing.JFrame implements ActionListener {
                 int y = e.getComponent().getY();
                 labelX.setText("x: " + x);
                 labelY.setText("y: " + y);
-            }
+            } 
         }
 
 	private DefaultListModel<String> model;
